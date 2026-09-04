@@ -42,7 +42,7 @@ background-color: #e9e5d9;
 background-color: #d4a373;
 }}
 </style>
-""", unsafe_allow_html=True
+""", unsafe_allow_html=True)
 
 #--- INITIAL DATA ---
 def get_daily_tasks():

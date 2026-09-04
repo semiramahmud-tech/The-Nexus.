@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
 
---- PAGE CONFIG ---
+#--- PAGE CONFIG ---
 st.set_page_config(page_title="The Nexus", page_icon="🏜️", layout="wide")
 
---- CUSTOM CSS (Sand and Stone Aesthetic) ---
+#--- CUSTOM CSS (Sand and Stone Aesthetic) ---
 st.markdown(f"""
 <style>
 /* Main background and text */
@@ -44,7 +44,7 @@ background-color: #d4a373;
 </style>
 """, unsafe_allow_index=True)
 
---- INITIAL DATA ---
+#--- INITIAL DATA ---
 def get_daily_tasks():
 return pd.DataFrame([
 {"Task": "Work: Project Plan (Gemini/SSH)", "Energy": "High", "Status": "Pending"},
@@ -62,11 +62,11 @@ return [
 {"Line": "Personal: Vegas Trip", "Station": "Packing", "Progress": 40, "Status": "🟢"},
 ]
 
---- NAVIGATION ---
+#--- NAVIGATION ---
 st.sidebar.title("🚉 Nex")
 page = st.sidebar.radio("Navigate to:", ["Daily Ticket", "Subway Routes", "Signal Box"])
 
---- DAILY TICKET PAGE ---
+#--- DAILY TICKET PAGE ---
 if page == "Daily Ticket":
 st.title("Your Daily Ticket")
 
@@ -87,7 +87,7 @@ st.checkbox(f"{row['Task']}", key=f"task_{index}")
 
 st.divider()
 st.caption("Nex Tip: Focus on Work priorities first, then Content, then Personal.")
---- SUBWAY ROUTES PAGE ---
+#--- SUBWAY ROUTES PAGE ---
 elif page == "Subway Routes":
 st.title("Strategic Roadmap")
 subway_data = get_subway_data()
@@ -100,7 +100,7 @@ st.progress(route['Progress'] / 100)
 with c2:
 st.write(f"{route['Status']} Current: {route['Station']}")
 st.write("---")
---- SIGNAL BOX ---
+#--- SIGNAL BOX ---
 elif page == "Signal Box":
 st.title("Signal Box (Blockers)")
 
@@ -109,7 +109,7 @@ st.warning("**Note:** Project Plan needs Manager 'Go-Ahead' session tomorrow.")
 
 if st.button("Resolve Blocker with First Principles"):
 st.write("Nex: 'If you had to pack in 15 minutes, what is the absolute essential outfit selection?'")
---- FOOTER ---
+#--- FOOTER ---
 st.sidebar.markdown("---")
 st.sidebar.caption("System: Sand & Stone v1.0")
 st.sidebar.button("Emergency Hibernation (3 Left)")

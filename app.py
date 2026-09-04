@@ -2,127 +2,122 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-# --- CONFIGURATION & THEME ---
-st.set_page_config(page_title="The Nexus", page_icon="●", layout="centered")
+# Page Configuration
+st.set_page_config(page_title="Nexus | Semira", layout="centered")
 
-# Timepage-inspired Minimalist CSS
+# Sand and Stone Minimalist CSS
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
-html, body, [class*="css"] {
+html, body, [data-testid="stAppViewContainer"] {
+    background-color: #F7F3F0 !important;
+    color: #2D2D2D;
     font-family: 'Inter', sans-serif;
-    background-color: #000000;
-    color: #FFFFFF;
 }
-.stApp {
-    background-color: #000000;
+
+.date-header {
+    font-size: 3.5rem;
+    font-weight: 600;
+    letter-spacing: -2px;
+    margin-bottom: 0px;
+    color: #2D2D2D;
 }
-h1, h2, h3 {
-    color: #FFFFFF !important;
-    font-weight: 300 !important;
-    letter-spacing: -1px;
+
+.sub-header {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #8C8279;
+    margin-bottom: 40px;
 }
+
 .stButton>button {
-    background-color: #FFFFFF;
-    color: #000000;
+    background-color: #2D2D2D;
+    color: #F7F3F0;
     border: none;
-    border-radius: 0px;
-    width: 100%;
+    border-radius: 2px;
+    padding: 10px 24px;
     transition: 0.3s;
+    width: 100%;
 }
+
 .stButton>button:hover {
-    background-color: #CCCCCC;
-    color: #000000;
+    background-color: #4A4A4A;
+    color: #F7F3F0;
 }
-.stTextArea textarea {
-    background-color: #111111;
-    color: #FFFFFF;
-    border: 1px solid #333333;
+
+.stTextArea textarea, .stTextInput input {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E0DB;
+    border-radius: 2px;
+    color: #2D2D2D;
 }
+
 hr {
-    border: 0;
-    border-top: 1px solid #333333;
-}
-/* Simple Task Card */
-.task-card {
-    padding: 15px 0px;
-    border-bottom: 1px solid #222222;
+    border-top: 1px solid #E5E0DB;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# --- DATA LOADING ---
+# Data Loading Logic
 SHEET_URL = "https://docs.google.com/spreadsheets/d/12v1XuPLArzwBY6pfQucXMvOhKoa9W07SFpbQKuG-52Y/export?format=csv"
 
 @st.cache_data(ttl=600)
-def load_data(url):
+def load_nexus_data(url):
     try:
         df = pd.read_csv(url)
         return df
-    except Exception as e:
-        # Fallback to empty if URL isn't set or fails
+    except:
         return pd.DataFrame()
 
-# --- APP LAYOUT ---
-
-# Header
-st.title("THE NEXUS")
-st.write(f"**SEPTEMBER 3, 2026**")
-st.write("---")
+# Vertical Timepage Header
+now = datetime.now()
+st.markdown(f'<div class="date-header">{now.strftime("%B %d")}</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="sub-header">{now.strftime("%A").upper()} | THE NEXUS</div>', unsafe_allow_html=True)
 
 # Vegas Countdown
 vegas_date = datetime(2026, 9, 5)
 today = datetime(2026, 9, 3)
 days_until = (vegas_date - today).days
-st.write(f"DEPARTURE FOR VEGAS IN: **{days_until} DAYS**")
 
+st.markdown(f"**{days_until} DAYS UNTIL VEGAS**")
 st.write("---")
 
-# Energy-Aware Task Filtering
+# Energy-Aware Task List
 st.subheader("TASKS")
 energy_level = st.select_slider(
-    "Current Energy Capacity",
+    "Current Energy Level",
     options=["Low", "Medium", "High"],
     value="Medium"
 )
 
-data = load_data(SHEET_URL)
+df = load_nexus_data(SHEET_URL)
 
-if not data.empty:
-    # Filter based on the 'Energy' column in your sheet
-    if 'Energy' in data.columns:
-        filtered_tasks = data[data['Energy'] == energy_level]
+if not df.empty and 'Task' in df.columns:
+    # Filter based on energy
+    filtered = df[df['Energy'] == energy_level] if 'Energy' in df.columns else df
 
-        if not filtered_tasks.empty:
-            for index, row in filtered_tasks.iterrows():
-                task_name = row.get('Task', 'Unnamed Task')
-                st.markdown(f"""
-                <div class="task-card">
-                <small>{energy_level.upper()}</small><br>
-                <strong>{task_name}</strong>
-                </div>
-                """, unsafe_allow_html=True)
-        else:
-            st.info(f"No {energy_level} energy tasks found.")
+    if not filtered.empty:
+        for index, row in filtered.iterrows():
+            st.markdown(f"**□ {row['Task']}**")
     else:
-        st.warning("Make sure your Google Sheet has an 'Energy' column!")
+        st.write(f"No {energy_level} energy tasks found.")
 else:
-    st.info("Awaiting connection to Google Sheets. Check your SHEET_URL.")
+    st.info("Syncing with Google Sheets...")
 
 st.write("---")
 
-# Journal Management
-st.subheader("JOURNAL")
-journal_entry = st.text_area("Observations & Notes", placeholder="Write here...", height=200)
+# Journal Entry Section
+st.subheader("JOURNAL ENTRY")
+journal_text = st.text_area("Observations", height=150, placeholder="Capture your thoughts here...")
+uploaded_file = st.file_uploader("Upload Journal Photo", type=['png', 'jpg', 'jpeg'])
 
-uploaded_file = st.file_uploader("Attach media or documents", type=['png', 'jpg', 'pdf'])
-
-if st.button("SAVE TO NEXUS"):
-    if journal_entry or uploaded_file:
-        st.success("Entry logged to system memory.")
+if st.button("SAVE TO SYSTEM"):
+    if journal_text or uploaded_file:
+        st.success("Entry captured. Nexus memory updated.")
     else:
-        st.warning("Entry is empty.")
+        st.warning("Please enter text or upload a photo.")
 
 st.write("---")
-st.caption("THE NEXUS • SYSTEM VERSION 4.0.2")
+st.caption("THE NEXUS • VERSION 4.1 • SAND & STONE")

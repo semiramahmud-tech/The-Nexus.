@@ -42,26 +42,25 @@ background-color: #e9e5d9;
 background-color: #d4a373;
 }}
 </style>
-""", unsafe_allow_index=True)
+""", unsafe_allow_html=True
 
 #--- INITIAL DATA ---
 def get_daily_tasks():
-return pd.DataFrame([
-{"Task": "Work: Project Plan (Gemini/SSH)", "Energy": "High", "Status": "Pending"},
-{"Task": "Work: Manager Sync & Invites", "Energy": "Medium", "Status": "Pending"},
-{"Task": "Content: Scripting (Aug 14-25)", "Energy": "High", "Status": "Pending"},
-{"Task": "Personal: Vegas Packing", "Energy": "Medium", "Status": "Pending"},
-{"Task": "Personal: Baby Meal Prep", "Energy": "Medium", "Status": "Pending"},
-{"Task": "Content: Scheduling for Next Week", "Energy": "Low", "Status": "Pending"},
-])
+    return pd.DataFrame([
+        {"Task": "Work: Project Plan (Gemini/SSH)", "Energy": "High", "Status": "Pending"},
+        {"Task": "Work: Manager Sync & Invites", "Energy": "Medium", "Status": "Pending"},
+        {"Task": "Content: Scripting (Aug 14-25)", "Energy": "High", "Status": "Pending"},
+        {"Task": "Personal: Vegas Packing", "Energy": "Medium", "Status": "Pending"},
+        {"Task": "Personal: Baby Meal Prep", "Energy": "Medium", "Status": "Pending"},
+        {"Task": "Content: Scheduling for Next Week", "Energy": "Low", "Status": "Pending"},
+    ])
 
 def get_subway_data():
-return [
-{"Line": "Work: Project Kickoff", "Station": "Plan Draft", "Progress": 20, "Status": "🟡"},
-{"Line": "Content: Sep 14-25", "Station": "Scripting", "Progress": 10, "Status": "🟡"},
-{"Line": "Personal: Vegas Trip", "Station": "Packing", "Progress": 40, "Status": "🟢"},
-]
-
+    return [
+        {"Line": "Work: Project Kickoff", "Station": "Plan Draft", "Progress": 20, "Status": "🟡"},
+        {"Line": "Content: Sep 14-25", "Station": "Scripting", "Progress": 10, "Status": "🟡"},
+        {"Line": "Personal: Vegas Trip", "Station": "Packing", "Progress": 40, "Status": "🟢"},
+    ]
 #--- NAVIGATION ---
 st.sidebar.title("🚉 Nex")
 page = st.sidebar.radio("Navigate to:", ["Daily Ticket", "Subway Routes", "Signal Box"])

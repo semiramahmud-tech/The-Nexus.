@@ -113,16 +113,3 @@ st.write("Nex: 'If you had to pack in 15 minutes, what is the absolute essential
 st.sidebar.markdown("---")
 st.sidebar.caption("System: Sand & Stone v1.0")
 st.sidebar.button("Emergency Hibernation (3 Left)")
-
-Now, create another file in the same place named requirements.txt.
-Paste these two lines into it and save:
-streamlit
-pandas
-📋 STEP 2: Make it Live (Streamlit)
-Go to Streamlit.io and sign in with your GitHub account.
-Click 'New App'.
-Select your The-Nexus repository.
-Click 'Deploy!'
-In about 2 minutes, your app will be live at a link you can open on your phone.
-
-Does this feel like a 'Friday AM' task, or do you want to try to get it 'Pasted and Published' tonight so you can use it for your Vegas trip prep?
